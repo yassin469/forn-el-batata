@@ -1,0 +1,10 @@
+// Cloudflare settings: serves the "public" folder as the website.
+{
+  "name": "forn-el-batata",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public"
+  },
+  "workers_dev": true,
+  "preview_urls": false
+}
