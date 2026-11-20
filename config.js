@@ -7,8 +7,8 @@ export const CONFIG = {
   //   anon / publishable key           → supabaseKey
   // The anon/publishable key is MEANT to be public. It is safe here.
   // NEVER paste the "service_role" or "secret" key into this file.
-  supabaseUrl: "",
-  supabaseKey: "",
+  supabaseUrl: "https://xczqgsxqonwbridhkmgh.supabase.co",
+  supabaseKey: "sb_publishable_uu9_fHT_ogbuvDgZLhFm9g_V-X10Wdw",
 
   // Card payments switch on once Paymob is connected (next step).
   cardPayments: false,
