@@ -1,10 +1,18 @@
-// Cloudflare settings: serves the "public" folder as the website.
+// Cloudflare settings: serves the "public" folder as the website,
+// and runs worker/index.js for /api/... (card payments).
 {
   "name": "forn-el-batata",
+  "main": "worker/index.js",
   "compatibility_date": "2026-11-01",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS"
   },
+  // Public settings. Secret keys live in Cloudflare → Settings → Variables and Secrets.
+  "vars": {
+    "SUPABASE_URL": "https://xczqgsxqonwbridhkmgh.supabase.co"
+  },
+  "observability": { "enabled": true },
   "workers_dev": true,
   "preview_urls": false
 }

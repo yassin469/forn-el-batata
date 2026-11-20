@@ -404,10 +404,15 @@ $("order-form").addEventListener("submit", async (e) => {
     if (error) throw error;
 
     if (pay === "card") {
-      const res = await db.functions.invoke("create-payment", { body: { code: data.code } });
-      if (res.error || !res.data?.url) throw new Error("We saved your order but couldn't open the payment page. Please try again or choose cash.");
+      const res = await fetch("/api/create-payment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: data.code }),
+      });
+      const payment = await res.json().catch(() => ({}));
+      if (!res.ok || !payment.url) throw new Error(payment.error || "We couldn't open the payment page. Please try again or choose cash.");
       cart = {}; saveCart();
-      location.href = res.data.url;   // go to Paymob's secure payment page
+      location.href = payment.url;   // go to Paymob's secure payment page
       return;
     }
 
@@ -437,8 +442,13 @@ $("new-order").addEventListener("click", () => {
 
 // Coming back from the payment page: ?paid=CODE or ?failed=CODE
 const params = new URLSearchParams(location.search);
-if (params.get("paid")) showDone(params.get("paid"), "Payment received. We're preparing your order now.");
-if (params.get("failed")) $("error").textContent = "Your payment didn't go through. Your cart is empty. Please order again, or choose cash.";
+const paidCode = params.get("paid");
+if (paidCode && /^[A-F0-9]{6}$/.test(paidCode)) showDone(paidCode, "Payment received. We're preparing your order now.");
+if (params.get("failed")) {
+  $("error").textContent = "Your payment didn't go through, so the order was cancelled. Please order again, or choose cash.";
+  setTimeout(() => $("order").scrollIntoView({ behavior: "smooth" }), 300);
+}
+if (params.has("paid") || params.has("failed")) history.replaceState(null, "", location.pathname);
 
 // ---- Start ----
 $("card-option").hidden = !CONFIG.cardPayments;
