@@ -1,0 +1,6 @@
+# Local Claude/app settings (not part of the website)
+.claude/
+
+# Never upload secret keys
+.env
+.env.*
