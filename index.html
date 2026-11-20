@@ -1,9 +1,34 @@
-<title>Forn El Batata</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forn El Batata · Charcoal-roasted sweet potato desserts in Zamalek</title>
+<meta name="description" content="Sweet potatoes slow-roasted over charcoal and dressed up for dessert. Order online for delivery in Zamalek, Garden City and Downtown Cairo. Open daily 4 pm – 1 am.">
+<meta name="theme-color" content="#e0661f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Forn El Batata · فرن البطاطا">
+<meta property="og:description" content="Charcoal-roasted sweet potato desserts. Order online, delivered across Zamalek, Garden City and Downtown.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍠</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Inter:wght@400;500;600&display=swap">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Restaurant",
+  "name": "Forn El Batata",
+  "alternateName": "فرن البطاطا",
+  "servesCuisine": ["Egyptian", "Desserts"],
+  "priceRange": "EGP 25–95",
+  "address": { "@type": "PostalAddress", "addressLocality": "Zamalek, Cairo", "addressCountry": "EG" },
+  "openingHours": "Mo-Su 16:00-01:00",
+  "paymentAccepted": "Cash, InstaPay"
+}
+</script>
+
 <style>
-  /* Layout: one narrow column like a street-cart sign — name, menu board, order button */
+  /* ============ COLORS & FONTS (change the look here) ============ */
   :root {
     --bg: #fbefe6;
     --surface: #fff8f3;
@@ -14,6 +39,8 @@
     --line: #ecd3c3;
     --wa: #1f8f4e;
     --wa-ink: #ffffff;
+    --ok: #1f8f4e;
+    --bad: #b8432f;
     --display: "Baloo Bhaijaan 2", "Trebuchet MS", system-ui, sans-serif;
     --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   }
@@ -21,163 +48,425 @@
     :root:not([data-theme="light"]) {
       --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
       --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --wa: #2bb365; --wa-ink: #0d1a12;
+      --ok: #4fd18a; --bad: #f08a76;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
     --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --wa: #2bb365; --wa-ink: #0d1a12;
+    --ok: #4fd18a; --bad: #f08a76;
     color-scheme: dark;
   }
 
+  /* ============ BASE ============ */
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
+    margin: 0;
     background: var(--bg);
     color: var(--ink);
     font-family: var(--body);
     font-size: 16px;
     line-height: 1.55;
   }
+  body.has-cart { padding-bottom: 88px; }
   .wrap {
-    max-width: 560px;
+    max-width: 600px;
     margin: 0 auto;
-    padding-block: 48px 64px;
+    padding-block: 40px 56px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     display: grid;
-    gap: 36px;
+    gap: 40px;
   }
-
-  header { display: grid; gap: 6px; }
-  .ar {
+  h2.section {
     font-family: var(--display);
-    font-weight: 700;
-    color: var(--flesh);
-    font-size: 1.35rem;
-    line-height: 1;
-  }
-  h1 {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: clamp(2.6rem, 11vw, 3.6rem);
-    line-height: 0.95;
-    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1.1;
     color: var(--skin);
-    text-wrap: balance;
+    margin: 0 0 12px;
   }
-  .tag { margin: 6px 0 0; color: var(--muted); max-width: 40ch; }
-  .where {
-    font-size: 0.78rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 600;
-  }
-
-  .menu {
+  .card {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 14px;
     padding: 8px 20px;
   }
-  .menu h2 {
-    font-family: var(--display);
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin: 14px 0 4px;
+  button { font: inherit; cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--flesh); outline-offset: 2px; }
+
+  /* ============ HEADER ============ */
+  header { display: grid; gap: 6px; }
+  .ar { font-family: var(--display); font-weight: 700; color: var(--flesh); font-size: 1.35rem; line-height: 1; }
+  h1 {
+    font-family: var(--display); font-weight: 800;
+    font-size: clamp(2.6rem, 11vw, 3.6rem); line-height: 0.95;
+    margin: 0; color: var(--skin); text-wrap: balance;
+  }
+  .tag { margin: 6px 0 0; color: var(--muted); max-width: 42ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 6px; }
+  .where { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface);
+  }
+  .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .status.open { color: var(--ok); } .status.open::before { background: var(--ok); }
+  .status.closed { color: var(--bad); } .status.closed::before { background: var(--bad); }
+  .hero-cta { margin-top: 14px; }
+
+  /* ============ MENU ============ */
+  .menu h3.cat {
+    font-family: var(--display); font-size: 0.85rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin: 16px 0 0;
   }
   .item {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 4px 16px;
-    padding-block: 16px;
-    border-top: 1px dashed var(--line);
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 16px;
+    padding-block: 16px; border-top: 1px dashed var(--line);
   }
-  .item:first-of-type { border-top: 0; }
-  .item h3 {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.3rem;
-    line-height: 1.2;
-    margin: 0;
-    min-width: 0;
-  }
-  .item h3 span { display: block; font-size: 0.95rem; color: var(--flesh); font-weight: 600; }
+  .cat + .item { border-top: 0; }
+  .item h4 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; margin: 0; min-width: 0; }
+  .item h4 span { display: block; font-size: 0.95rem; color: var(--flesh); font-weight: 600; }
   .item p { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 0.93rem; }
-  .price {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: 1.3rem;
-    color: var(--skin);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    align-self: start;
-  }
+  .price { font-family: var(--display); font-weight: 800; font-size: 1.25rem; color: var(--skin); font-variant-numeric: tabular-nums; white-space: nowrap; align-self: start; }
   .price small { font-size: 0.75rem; font-weight: 600; color: var(--muted); margin-left: 3px; }
+  .item .controls { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 4px; }
+  .add {
+    border: 1.5px solid var(--flesh); color: var(--flesh); background: transparent;
+    font-weight: 600; padding: 8px 18px; border-radius: 999px; min-height: 40px;
+  }
+  .add:hover { background: var(--flesh); color: var(--surface); }
+  .qty { display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid var(--flesh); border-radius: 999px; padding: 2px; }
+  .qty button {
+    width: 36px; height: 36px; border-radius: 50%; border: 0;
+    background: var(--flesh); color: var(--surface); font-size: 1.2rem; font-weight: 700; line-height: 1;
+  }
+  .qty output { min-width: 28px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
 
-  .order { display: grid; gap: 10px; justify-items: start; }
+  /* ============ ORDER FORM ============ */
+  .order { padding: 20px; display: grid; gap: 16px; }
+  .lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .lines li, .sum-row { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+  .lines li span:first-child { min-width: 0; }
+  .empty { color: var(--muted); margin: 0; }
+  .sums { border-top: 1px dashed var(--line); padding-top: 10px; display: grid; gap: 4px; }
+  .sum-row.muted { color: var(--muted); font-size: 0.93rem; }
+  .sum-row.total { font-family: var(--display); font-size: 1.3rem; font-weight: 800; color: var(--skin); }
+  .field { display: grid; gap: 6px; }
+  .field label, .field legend { font-weight: 600; font-size: 0.92rem; }
+  .field input, .field select, .field textarea {
+    font: inherit; color: var(--ink); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%;
+  }
+  .field textarea { resize: vertical; min-height: 70px; }
+  fieldset.field { border: 0; padding: 0; margin: 0; }
+  .radios { display: flex; flex-wrap: wrap; gap: 10px; }
+  .radios label {
+    display: inline-flex; align-items: center; gap: 8px; font-weight: 500;
+    border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; background: var(--bg);
+  }
+  .error { color: var(--bad); font-size: 0.9rem; margin: 0; min-height: 1.2em; }
+  .hint { color: var(--muted); font-size: 0.88rem; margin: 0; }
+
   .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--wa);
-    color: var(--wa-ink);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1.05rem;
-    padding: 14px 22px;
-    border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--wa); color: var(--wa-ink); text-decoration: none; border: 0;
+    font-weight: 600; font-size: 1.05rem; padding: 14px 22px; border-radius: 999px;
     transition: transform .15s ease, filter .15s ease;
   }
   .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
-  .btn:focus-visible { outline: 3px solid var(--flesh); outline-offset: 3px; }
   .btn svg { width: 22px; height: 22px; flex: none; }
-  .note { margin: 0; font-size: 0.88rem; color: var(--muted); }
-  .note b { color: var(--ink); font-variant-numeric: tabular-nums; user-select: all; }
+  .btn.full { width: 100%; }
+  .btn.alt { background: var(--flesh); color: #fff; }
 
-  footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
+  /* ============ INFO, FAQ, FOOTER ============ */
+  .info { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .info .card { padding: 16px; }
+  .info h3 { margin: 0 0 4px; font-family: var(--display); font-size: 1.05rem; color: var(--skin); }
+  .info p { margin: 0; color: var(--muted); font-size: 0.93rem; }
+  .info a { color: var(--flesh); }
+  details { border-top: 1px dashed var(--line); padding-block: 14px; }
+  details:first-child { border-top: 0; }
+  summary { font-weight: 600; cursor: pointer; }
+  details p { margin: 8px 0 0; color: var(--muted); }
+  footer { font-size: 0.82rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 4px; }
+  footer b { color: var(--ink); user-select: all; }
 
-  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } .btn:hover { transform: none; } }
+  /* ============ STICKY CART BAR (phones) ============ */
+  .cartbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    padding: 12px max(16px, env(safe-area-inset-left, 0px)) calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--surface); border-top: 1px solid var(--line);
+    display: none;
+  }
+  body.has-cart .cartbar { display: block; }
+  .cartbar a { max-width: 600px; margin: 0 auto; display: flex; justify-content: space-between; }
+
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
 </style>
+</head>
+<body>
 
 <main class="wrap">
+  <!-- ============ TOP OF PAGE ============ -->
   <header>
     <div class="ar" lang="ar" dir="rtl">فرن البطاطا</div>
     <h1>Forn El Batata</h1>
     <p class="tag">Sweet potatoes roasted slow over charcoal, the way the street carts do it, then dressed up for dessert.</p>
-    <div class="where">Zamalek, Cairo · Daily 4 pm – 1 am</div>
+    <div class="meta">
+      <span class="status" id="status" role="status">Checking hours…</span>
+      <span class="where">Zamalek, Cairo · Daily 4 pm – 1 am</span>
+    </div>
+    <div class="hero-cta"><a class="btn alt" href="#menu-title">See the menu &amp; order</a></div>
   </header>
 
-  <section class="menu" aria-labelledby="menu-title">
-    <h2 id="menu-title">Menu</h2>
+  <!-- ============ MENU (items come from the MENU list in the script below) ============ -->
+  <section aria-labelledby="menu-title">
+    <h2 class="section" id="menu-title">Menu</h2>
+    <div class="card menu" id="menu"></div>
+  </section>
 
-    <div class="item">
-      <h3>Classic Charcoal Batata <span lang="ar">بطاطا مشوية</span></h3>
-      <div class="price">45<small>EGP</small></div>
-      <p>A whole roasted sweet potato, split open hot with a knob of butter and a pinch of cinnamon.</p>
-    </div>
+  <!-- ============ ORDER FORM ============ -->
+  <section aria-labelledby="order-title" id="order">
+    <h2 class="section" id="order-title">Your order</h2>
+    <form class="card order" id="order-form" novalidate>
+      <div>
+        <ul class="lines" id="lines"></ul>
+        <p class="empty" id="empty">Nothing yet. Tap <b>Add</b> on anything in the menu.</p>
+      </div>
+      <div class="sums">
+        <div class="sum-row muted"><span>Subtotal</span><span id="subtotal">0 EGP</span></div>
+        <div class="sum-row muted"><span id="delivery-label">Delivery</span><span id="delivery">–</span></div>
+        <div class="sum-row total"><span>Total</span><span id="total">0 EGP</span></div>
+      </div>
 
-    <div class="item">
-      <h3>Caramel &amp; Nuts Batata <span lang="ar">بطاطا كراميل ومكسرات</span></h3>
-      <div class="price">75<small>EGP</small></div>
-      <p>Mashed roasted batata topped with salted caramel, toasted hazelnuts and pistachio.</p>
-    </div>
+      <div class="field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="area">Area</label>
+        <select id="area" name="area" required></select>
+      </div>
+      <div class="field">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" autocomplete="street-address" placeholder="Street, building, floor, apartment" required></textarea>
+      </div>
+      <fieldset class="field">
+        <legend>Payment on delivery</legend>
+        <div class="radios">
+          <label><input type="radio" name="pay" value="Cash" checked> Cash</label>
+          <label><input type="radio" name="pay" value="InstaPay"> InstaPay</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="notes">Notes <span class="hint">(optional)</span></label>
+        <input id="notes" name="notes" placeholder="Extra cinnamon, no nuts, ring the bell twice…">
+      </div>
 
-    <div class="item">
-      <h3>Batata Om Ali <span lang="ar">بطاطا أم علي</span></h3>
-      <div class="price">95<small>EGP</small></div>
-      <p>Baked in a clay dish with milk, cream, coconut, raisins and flaky pastry. Served bubbling.</p>
+      <p class="error" id="error" role="alert"></p>
+      <p class="hint" id="closed-hint" hidden>We're closed right now. You can still send your order and we'll confirm it when we open at 4 pm.</p>
+      <button class="btn full" type="submit">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+        Send order on WhatsApp
+      </button>
+      <p class="hint">This opens WhatsApp with your order already written. Just press send.</p>
+    </form>
+  </section>
+
+  <!-- ============ INFO ============ -->
+  <section aria-labelledby="info-title">
+    <h2 class="section" id="info-title">Good to know</h2>
+    <div class="info">
+      <div class="card"><h3>Hours</h3><p>Every day<br>4 pm – 1 am</p></div>
+      <div class="card"><h3>Delivery</h3><p id="areas-text"></p></div>
+      <div class="card"><h3>Find us</h3><p>Zamalek, Cairo<br><a href="https://maps.google.com/?q=Zamalek,Cairo" target="_blank" rel="noopener">Open in Maps</a></p></div>
     </div>
   </section>
 
-  <section class="order">
-    <a class="btn" id="wa-order" href="https://wa.me/201000000000?text=Hi%20Forn%20El%20Batata!%20I%27d%20like%20to%20order%3A%20" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-      Order on WhatsApp
-    </a>
-    <p class="note">Or message us directly: <b>+20 100 000 0000</b></p>
+  <section aria-labelledby="faq-title">
+    <h2 class="section" id="faq-title">Questions</h2>
+    <div class="card">
+      <details><summary>How long does delivery take?</summary><p>Usually 30–45 minutes. Every batata is roasted to order over charcoal.</p></details>
+      <details><summary>How do I pay with InstaPay?</summary><p>Choose InstaPay in the order form and we'll send you our InstaPay details on WhatsApp when we confirm.</p></details>
+      <details><summary>Do you have options without nuts?</summary><p>Yes. The Classic and Om Ali can be made nut-free. Just add it in the notes.</p></details>
+      <details><summary>Can I order for a party?</summary><p>Yes. For 10 or more pieces, message us a day ahead and we'll prepare a tray.</p></details>
+    </div>
   </section>
 
-  <footer>Delivery across Zamalek, Garden City and Downtown. Cash or InstaPay on delivery.</footer>
+  <footer>
+    <span>Questions? Message us: <b id="phone-display"></b></span>
+    <span>© <span id="year"></span> Forn El Batata · فرن البطاطا</span>
+  </footer>
 </main>
+
+<div class="cartbar">
+  <a class="btn" href="#order"><span id="bar-count">0 items</span><span id="bar-total">Review order · 0 EGP</span></a>
+</div>
+
+<script>
+/* =====================================================================
+   SETTINGS: change these to update the site. No other code needs to change.
+   ===================================================================== */
+const CONFIG = {
+  whatsappNumber: "201000000000",      // country code + number, no "+" or spaces
+  phoneDisplay:   "+20 100 000 0000",
+  timeZone:       "Africa/Cairo",
+  openHour:       16,                  // 4 pm
+  closeHour:      1,                   // 1 am (after midnight)
+  deliveryAreas: {                     // area name: delivery fee in EGP
+    "Zamalek":     20,
+    "Garden City": 30,
+    "Downtown":    30,
+  },
+};
+
+const MENU = [
+  { id: "classic", category: "Batata", name: "Classic Charcoal Batata", ar: "بطاطا مشوية", price: 45,
+    desc: "A whole roasted sweet potato, split open hot with a knob of butter and a pinch of cinnamon." },
+  { id: "caramel", category: "Batata", name: "Caramel & Nuts Batata", ar: "بطاطا كراميل ومكسرات", price: 75,
+    desc: "Mashed roasted batata topped with salted caramel, toasted hazelnuts and pistachio." },
+  { id: "nutella", category: "Batata", name: "Nutella Batata", ar: "بطاطا نوتيلا", price: 85,
+    desc: "Roasted batata filled with warm Nutella and crushed biscuits." },
+  { id: "omali", category: "Batata", name: "Batata Om Ali", ar: "بطاطا أم علي", price: 95,
+    desc: "Baked in a clay dish with milk, cream, coconut, raisins and flaky pastry. Served bubbling." },
+  { id: "sahlab", category: "Drinks", name: "Hot Sahlab", ar: "سحلب", price: 40,
+    desc: "Thick, warm milk drink with coconut, cinnamon and nuts." },
+  { id: "tea", category: "Drinks", name: "Mint Tea", ar: "شاي بالنعناع", price: 25,
+    desc: "Fresh mint, served hot." },
+];
+
+/* =====================================================================
+   HOW THE PAGE WORKS (you don't need to edit below this line)
+   ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const egp = (n) => `${n} EGP`;
+const byId = Object.fromEntries(MENU.map((m) => [m.id, m]));
+const escapeHtml = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// Cart: { itemId: quantity }. Remembered on this device if the browser allows it.
+let cart = {};
+try { cart = JSON.parse(localStorage.getItem("feb-cart") || "{}") || {}; } catch (e) { cart = {}; }
+for (const id of Object.keys(cart)) if (!byId[id] || !(cart[id] > 0)) delete cart[id];
+const saveCart = () => { try { localStorage.setItem("feb-cart", JSON.stringify(cart)); } catch (e) {} };
+
+// ---- Open / closed badge (uses Cairo time, wherever the visitor is) ----
+function isOpenNow() {
+  const hour = parseInt(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h23", timeZone: CONFIG.timeZone }).format(new Date()), 10);
+  const { openHour: o, closeHour: c } = CONFIG;
+  return o < c ? hour >= o && hour < c : hour >= o || hour < c;
+}
+function renderStatus() {
+  const open = isOpenNow();
+  const el = $("status");
+  el.className = "status " + (open ? "open" : "closed");
+  el.textContent = open ? "Open now · until 1 am" : "Closed · opens at 4 pm";
+  $("closed-hint").hidden = open;
+}
+
+// ---- Menu ----
+function renderMenu() {
+  let html = "", lastCat = null;
+  for (const m of MENU) {
+    if (m.category !== lastCat) { html += `<h3 class="cat">${escapeHtml(m.category)}</h3>`; lastCat = m.category; }
+    const q = cart[m.id] || 0;
+    const controls = q === 0
+      ? `<button type="button" class="add" data-act="inc" data-id="${m.id}" aria-label="Add ${escapeHtml(m.name)}">Add</button>`
+      : `<span class="qty"><button type="button" data-act="dec" data-id="${m.id}" aria-label="Remove one ${escapeHtml(m.name)}">−</button><output aria-live="polite">${q}</output><button type="button" data-act="inc" data-id="${m.id}" aria-label="Add one more ${escapeHtml(m.name)}">+</button></span>`;
+    html += `<div class="item">
+      <h4>${escapeHtml(m.name)} <span lang="ar">${m.ar}</span></h4>
+      <div class="price">${m.price}<small>EGP</small></div>
+      <p>${escapeHtml(m.desc)}</p>
+      <div class="controls">${controls}</div>
+    </div>`;
+  }
+  $("menu").innerHTML = html;
+}
+$("menu").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-act]");
+  if (!b) return;
+  const id = b.dataset.id;
+  cart[id] = (cart[id] || 0) + (b.dataset.act === "inc" ? 1 : -1);
+  if (cart[id] <= 0) delete cart[id];
+  saveCart();
+  renderMenu();
+  renderOrder();
+  // keep keyboard focus on the same item after re-render
+  const again = document.querySelector(`button[data-id="${id}"][data-act="${b.dataset.act}"]`) || document.querySelector(`button[data-id="${id}"]`);
+  if (again) again.focus();
+});
+
+// ---- Order summary ----
+function totals() {
+  const subtotal = Object.entries(cart).reduce((s, [id, q]) => s + byId[id].price * q, 0);
+  const area = $("area").value;
+  const delivery = area ? CONFIG.deliveryAreas[area] : 0;
+  const count = Object.values(cart).reduce((s, q) => s + q, 0);
+  return { subtotal, delivery, total: subtotal + delivery, count, area };
+}
+function renderOrder() {
+  const t = totals();
+  $("lines").innerHTML = Object.entries(cart).map(([id, q]) =>
+    `<li><span>${q} × ${escapeHtml(byId[id].name)}</span><span>${egp(byId[id].price * q)}</span></li>`).join("");
+  $("empty").hidden = t.count > 0;
+  $("subtotal").textContent = egp(t.subtotal);
+  $("delivery-label").textContent = t.area ? `Delivery (${t.area})` : "Delivery";
+  $("delivery").textContent = t.area ? egp(t.delivery) : "Choose area";
+  $("total").textContent = egp(t.total);
+  document.body.classList.toggle("has-cart", t.count > 0);
+  $("bar-count").textContent = `${t.count} item${t.count === 1 ? "" : "s"}`;
+  $("bar-total").textContent = `Review order · ${egp(t.total)}`;
+}
+
+// ---- Area dropdown & info text ----
+$("area").innerHTML = `<option value="">Choose your area…</option>` +
+  Object.entries(CONFIG.deliveryAreas).map(([a, fee]) => `<option value="${escapeHtml(a)}">${escapeHtml(a)} (+${fee} EGP)</option>`).join("");
+$("area").addEventListener("change", renderOrder);
+$("areas-text").innerHTML = Object.entries(CONFIG.deliveryAreas).map(([a, fee]) => `${escapeHtml(a)}: ${fee} EGP`).join("<br>");
+
+// ---- Send order on WhatsApp ----
+$("order-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const t = totals();
+  const name = $("name").value.trim(), address = $("address").value.trim(), notes = $("notes").value.trim();
+  const pay = document.querySelector('input[name="pay"]:checked').value;
+  const problems = [];
+  if (t.count === 0) problems.push("add at least one item");
+  if (!name) problems.push("enter your name");
+  if (!t.area) problems.push("choose your area");
+  if (!address) problems.push("enter your address");
+  if (problems.length) { $("error").textContent = "Please " + problems.join(", ") + "."; return; }
+  $("error").textContent = "";
+
+  const lines = Object.entries(cart).map(([id, q]) => `• ${q} × ${byId[id].name}: ${byId[id].price * q} EGP`);
+  const msg = [
+    "Hi Forn El Batata! New order:",
+    ...lines,
+    "",
+    `Subtotal: ${t.subtotal} EGP`,
+    `Delivery (${t.area}): ${t.delivery} EGP`,
+    `Total: ${t.total} EGP`,
+    "",
+    `Name: ${name}`,
+    `Area: ${t.area}`,
+    `Address: ${address}`,
+    `Payment: ${pay}`,
+    notes ? `Notes: ${notes}` : null,
+  ].filter((l) => l !== null).join("\n");
+
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+});
+
+// ---- Start ----
+$("phone-display").textContent = CONFIG.phoneDisplay;
+$("year").textContent = new Date().getFullYear();
+renderStatus();
+setInterval(renderStatus, 60000);
+renderMenu();
+renderOrder();
+</script>
+</body>
+</html>
