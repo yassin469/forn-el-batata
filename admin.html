@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Orders · Forn El Batata</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍠</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #fbefe6; --surface: #fff8f3; --ink: #3a1d17; --muted: #7d5b50;
+    --flesh: #e0661f; --skin: #8a3b2a; --line: #ecd3c3;
+    --go: #1f8f4e; --bad: #b8432f; --warn: #a86a00;
+    --new-bg: #fde4d3; --prep-bg: #fff1c7; --out-bg: #dceefe; --done-bg: #ddf3e5; --cancel-bg: #eee5e1;
+    --display: "Baloo Bhaijaan 2", "Trebuchet MS", system-ui, sans-serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
+      --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --go: #4fd18a; --bad: #f08a76; --warn: #f2c14e;
+      --new-bg: #4a2717; --prep-bg: #41361a; --out-bg: #1d3347; --done-bg: #1c3a28; --cancel-bg: #352a26;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
+    --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --go: #4fd18a; --bad: #f08a76; --warn: #f2c14e;
+    --new-bg: #4a2717; --prep-bg: #41361a; --out-bg: #1d3347; --done-bg: #1c3a28; --cancel-bg: #352a26;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--flesh); outline-offset: 2px; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 20px max(16px, env(safe-area-inset-left, 0px)) 48px; }
+  h1 { font-family: var(--display); font-size: 1.6rem; color: var(--skin); margin: 0; line-height: 1.1; }
+  .top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .who { color: var(--muted); font-size: 0.88rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn { border: 0; border-radius: 999px; padding: 10px 18px; font-weight: 600; background: var(--flesh); color: #fff; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn.green { background: var(--go); color: #fff; }
+  .btn.small { padding: 6px 12px; font-size: 0.85rem; }
+  .btn:disabled { opacity: .55; cursor: not-allowed; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+
+  /* login */
+  .login { max-width: 380px; margin: 10vh auto 0; display: grid; gap: 14px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-weight: 600; font-size: 0.9rem; }
+  .field input, .field select, .field textarea { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
+  .error { color: var(--bad); margin: 0; min-height: 1.2em; font-size: 0.9rem; }
+  .muted { color: var(--muted); }
+
+  /* tabs */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .tabs button { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 999px; font-weight: 600; }
+  .tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .count { display: inline-block; min-width: 1.6em; padding: 0 6px; margin-left: 4px; border-radius: 999px; background: var(--flesh); color: #fff; font-size: 0.78rem; text-align: center; }
+
+  /* stats */
+  .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 16px; }
+  .stat .label { font-size: 0.8rem; color: var(--muted); }
+  .stat .value { font-family: var(--display); font-size: 1.6rem; font-weight: 800; color: var(--skin); font-variant-numeric: tabular-nums; line-height: 1.2; }
+
+  /* orders */
+  .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
+  .order { display: grid; gap: 10px; border-left: 6px solid var(--line); }
+  .order.s-new { border-left-color: var(--flesh); }
+  .order.s-preparing { border-left-color: var(--warn); }
+  .order.s-out_for_delivery { border-left-color: #3b82c4; }
+  .order.s-delivered { border-left-color: var(--go); }
+  .order-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .order-code { font-family: var(--display); font-weight: 800; font-size: 1.25rem; }
+  .ago { color: var(--muted); font-size: 0.85rem; white-space: nowrap; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; }
+  .p-new { background: var(--new-bg); } .p-preparing { background: var(--prep-bg); }
+  .p-out_for_delivery { background: var(--out-bg); } .p-delivered { background: var(--done-bg); }
+  .p-cancelled { background: var(--cancel-bg); }
+  .pay-paid { color: var(--go); font-weight: 600; } .pay-pending, .pay-failed { color: var(--bad); font-weight: 600; }
+  .order ul { margin: 0; padding-left: 18px; }
+  .order .row { display: flex; justify-content: space-between; gap: 10px; }
+  .order .total { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .order a { color: var(--flesh); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .warn { background: var(--new-bg); color: var(--bad); border-radius: 8px; padding: 6px 10px; font-size: 0.85rem; font-weight: 600; }
+  .empty { text-align: center; color: var(--muted); padding: 40px 16px; }
+
+  /* menu editor */
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+  td input[type="number"] { width: 90px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  .table-wrap { overflow-x: auto; }
+  .new-item { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-top: 16px; align-items: end; }
+  .saved { color: var(--go); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ LOGIN ============ -->
+  <form class="card login" id="login" hidden>
+    <h1>Forn El Batata · Admin</h1>
+    <p class="muted" style="margin:0">Sign in to see and manage orders.</p>
+    <div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+    <p class="error" id="login-error" role="alert"></p>
+    <button class="btn" type="submit" id="login-btn">Sign in</button>
+  </form>
+
+  <p class="card" id="not-configured" hidden>Not connected yet. Add your Supabase details in <b>config.js</b>.</p>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="app" hidden>
+    <div class="top">
+      <h1>Orders</h1>
+      <div class="who"><span id="live" class="muted">● Connecting…</span><span id="who"></span><button class="btn ghost small" id="logout">Sign out</button></div>
+    </div>
+
+    <div class="stats">
+      <div class="card stat"><div class="label">Orders today</div><div class="value" id="st-count">0</div></div>
+      <div class="card stat"><div class="label">Sales today</div><div class="value" id="st-sales">0 EGP</div></div>
+      <div class="card stat"><div class="label">Waiting to start</div><div class="value" id="st-new">0</div></div>
+      <div class="card stat"><div class="label">On the way</div><div class="value" id="st-out">0</div></div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="active" aria-selected="true">Active <span class="count" id="c-active">0</span></button>
+      <button role="tab" data-tab="done" aria-selected="false">Delivered</button>
+      <button role="tab" data-tab="cancelled" aria-selected="false">Cancelled</button>
+      <button role="tab" data-tab="menu" aria-selected="false">Menu</button>
+    </div>
+
+    <div id="orders" class="grid"></div>
+
+    <div id="menu-editor" hidden>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Item</th><th>Category</th><th>Price (EGP)</th><th>On menu</th><th></th></tr></thead>
+            <tbody id="menu-rows"></tbody>
+          </table>
+        </div>
+        <h3 style="margin:24px 0 0">Add a new item</h3>
+        <form class="new-item" id="new-item">
+          <div class="field"><label for="ni-name">Name</label><input id="ni-name" required></div>
+          <div class="field"><label for="ni-ar">Arabic name</label><input id="ni-ar" dir="rtl"></div>
+          <div class="field"><label for="ni-cat">Category</label><input id="ni-cat" value="Batata" required></div>
+          <div class="field"><label for="ni-price">Price (EGP)</label><input id="ni-price" type="number" min="0" required></div>
+          <div class="field" style="grid-column:1/-1"><label for="ni-desc">Description</label><input id="ni-desc"></div>
+          <button class="btn" type="submit">Add item</button>
+          <p class="error" id="ni-error"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+import { CONFIG } from "./config.js";
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const egp = (n) => `${Number(n).toLocaleString("en")} EGP`;
+
+const STATUS = {
+  new:              { label: "New",              next: "preparing",        nextLabel: "Start preparing" },
+  preparing:        { label: "Preparing",        next: "out_for_delivery", nextLabel: "Send out for delivery" },
+  out_for_delivery: { label: "Out for delivery", next: "delivered",        nextLabel: "Mark delivered" },
+  delivered:        { label: "Delivered" },
+  cancelled:        { label: "Cancelled" },
+};
+
+if (!CONFIG.supabaseUrl || !CONFIG.supabaseKey) {
+  $("not-configured").hidden = false;
+  throw new Error("Supabase not configured");
+}
+const db = createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+
+let orders = [], menu = [], tab = "active", channel = null, knownIds = new Set();
+
+// ============ LOGIN ============
+$("login").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("login-btn").disabled = true; $("login-error").textContent = "";
+  const { error } = await db.auth.signInWithPassword({ email: $("email").value.trim(), password: $("password").value });
+  $("login-btn").disabled = false;
+  if (error) $("login-error").textContent = "Wrong email or password.";
+});
+$("logout").addEventListener("click", () => db.auth.signOut());
+
+db.auth.onAuthStateChange((_event, session) => { setTimeout(() => showFor(session), 0); });
+
+async function showFor(session) {
+  if (!session) {
+    $("app").hidden = true; $("login").hidden = false;
+    if (channel) { db.removeChannel(channel); channel = null; }
+    return;
+  }
+  const { data: isAdmin } = await db.rpc("is_admin");
+  if (!isAdmin) {
+    $("login-error").textContent = "This account is not an admin yet. Run the 'make yourself an admin' step in setup.sql.";
+    await db.auth.signOut();
+    return;
+  }
+  $("login").hidden = true; $("app").hidden = false;
+  $("who").textContent = session.user.email;
+  await Promise.all([loadOrders(), loadMenu()]);
+  subscribe();
+}
+
+// ============ ORDERS ============
+async function loadOrders(fromLive = false) {
+  const { data, error } = await db.from("orders").select("*, order_items(*)").order("created_at", { ascending: false }).limit(200);
+  if (error) { console.error(error); return; }
+  const fresh = data.filter((o) => !knownIds.has(o.id));
+  if (fromLive && fresh.length) ding();
+  knownIds = new Set(data.map((o) => o.id));
+  orders = data;
+  render();
+}
+
+function subscribe() {
+  if (channel) return;
+  channel = db.channel("orders-live")
+    .on("postgres_changes", { event: "*", schema: "public", table: "orders" }, () => loadOrders(true))
+    .subscribe((status) => {
+      const live = status === "SUBSCRIBED";
+      $("live").textContent = live ? "● Live" : "● Reconnecting…";
+      $("live").style.color = live ? "var(--go)" : "var(--bad)";
+    });
+  setInterval(() => loadOrders(true), 60000); // backup refresh every minute
+}
+
+function ding() {
+  try {
+    const ctx = new AudioContext();
+    [0, 0.18].forEach((t) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.25, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.15);
+      o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.16);
+    });
+  } catch (e) {}
+}
+
+function ago(iso) {
+  const min = Math.round((Date.now() - new Date(iso)) / 60000);
+  if (min < 1) return "just now";
+  if (min < 60) return `${min} min ago`;
+  const h = Math.floor(min / 60);
+  if (h < 24) return `${h} h ${min % 60} min ago`;
+  return new Date(iso).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: CONFIG.timeZone });
+}
+
+function render() {
+  const active = orders.filter((o) => ["new", "preparing", "out_for_delivery"].includes(o.status));
+  $("c-active").textContent = active.length;
+  document.title = (active.filter((o) => o.status === "new").length ? `(${active.filter((o) => o.status === "new").length}) ` : "") + "Orders · Forn El Batata";
+
+  // today's stats (Cairo day)
+  const day = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: CONFIG.timeZone }).format(new Date(d));
+  const today = orders.filter((o) => day(o.created_at) === day(Date.now()) && o.status !== "cancelled");
+  $("st-count").textContent = today.length;
+  $("st-sales").textContent = egp(today.reduce((s, o) => s + o.total, 0));
+  $("st-new").textContent = orders.filter((o) => o.status === "new").length;
+  $("st-out").textContent = orders.filter((o) => o.status === "out_for_delivery").length;
+
+  const isMenu = tab === "menu";
+  $("orders").hidden = isMenu; $("menu-editor").hidden = !isMenu;
+  if (isMenu) return renderMenu();
+
+  let list = tab === "active" ? active.slice().sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+           : orders.filter((o) => o.status === (tab === "done" ? "delivered" : "cancelled"));
+  if (!list.length) {
+    $("orders").innerHTML = `<div class="card empty" style="grid-column:1/-1">${tab === "active" ? "No orders right now. New orders appear here automatically, with a sound." : "Nothing here yet."}</div>`;
+    return;
+  }
+  $("orders").innerHTML = list.map(orderCard).join("");
+}
+
+function orderCard(o) {
+  const s = STATUS[o.status];
+  const unpaidCard = o.payment_method === "card" && o.payment_status !== "paid";
+  const payText = o.payment_method === "cash" ? "Cash on delivery" : `Card: <span class="pay-${esc(o.payment_status)}">${esc(o.payment_status)}</span>`;
+  const items = o.order_items.map((i) => `<li>${i.quantity} × ${esc(i.name)}</li>`).join("");
+  const canAct = !["delivered", "cancelled"].includes(o.status);
+  return `<article class="card order s-${o.status}">
+    <div class="order-head"><span class="order-code">#${esc(o.code)}</span><span class="ago">${ago(o.created_at)}</span></div>
+    <div><span class="pill p-${o.status}">${s.label}</span></div>
+    ${unpaidCard && canAct ? `<div class="warn">Not paid yet. Don't prepare until payment shows "paid".</div>` : ""}
+    <ul>${items}</ul>
+    ${o.notes ? `<div><b>Notes:</b> ${esc(o.notes)}</div>` : ""}
+    <div>
+      <div><b>${esc(o.customer_name)}</b> · <a href="tel:${esc(o.phone)}">${esc(o.phone)}</a></div>
+      <div class="muted">${esc(o.area)}: ${esc(o.address)}</div>
+    </div>
+    <div class="row"><span class="muted">${payText}</span><span class="total">${egp(o.total)}</span></div>
+    ${canAct ? `<div class="actions">
+      <button class="btn green small" data-id="${o.id}" data-set="${s.next}" ${unpaidCard ? "disabled" : ""}>${s.nextLabel}</button>
+      <button class="btn ghost small" data-id="${o.id}" data-set="cancelled">Cancel</button>
+    </div>` : ""}
+  </article>`;
+}
+
+$("orders").addEventListener("click", async (e) => {
+  const b = e.target.closest("button[data-set]");
+  if (!b) return;
+  const id = Number(b.dataset.id), status = b.dataset.set;
+  if (status === "cancelled" && !confirm("Cancel this order?")) return;
+  b.disabled = true;
+  const { error } = await db.from("orders").update({ status }).eq("id", id);
+  if (error) { alert("Couldn't update the order: " + error.message); b.disabled = false; return; }
+  await loadOrders();
+});
+
+// ============ TABS ============
+document.querySelectorAll("[data-tab]").forEach((b) => b.addEventListener("click", () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll("[data-tab]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+  render();
+}));
+
+// ============ MENU EDITOR ============
+async function loadMenu() {
+  const { data, error } = await db.from("menu_items").select("*").order("sort_order");
+  if (!error) menu = data;
+}
+function renderMenu() {
+  $("menu-rows").innerHTML = menu.map((m) => `<tr data-id="${esc(m.id)}">
+    <td><b>${esc(m.name)}</b>${m.name_ar ? `<div class="muted" dir="rtl">${esc(m.name_ar)}</div>` : ""}</td>
+    <td>${esc(m.category)}</td>
+    <td><input type="number" min="0" value="${m.price}" aria-label="Price of ${esc(m.name)}"></td>
+    <td><input type="checkbox" ${m.available ? "checked" : ""} aria-label="${esc(m.name)} on menu"></td>
+    <td><button class="btn small" data-save>Save</button> <span class="saved" hidden>Saved ✓</span></td>
+  </tr>`).join("");
+}
+$("menu-rows").addEventListener("click", async (e) => {
+  if (!e.target.matches("[data-save]")) return;
+  const row = e.target.closest("tr");
+  const price = parseInt(row.querySelector('input[type="number"]').value, 10);
+  const available = row.querySelector('input[type="checkbox"]').checked;
+  if (!(price >= 0)) return alert("Please enter a price.");
+  e.target.disabled = true;
+  const { error } = await db.from("menu_items").update({ price, available }).eq("id", row.dataset.id);
+  e.target.disabled = false;
+  if (error) return alert("Couldn't save: " + error.message);
+  const ok = row.querySelector(".saved"); ok.hidden = false; setTimeout(() => (ok.hidden = true), 2000);
+  await loadMenu();
+});
+$("new-item").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const name = $("ni-name").value.trim();
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "item-" + Date.now();
+  const row = {
+    id, name, name_ar: $("ni-ar").value.trim() || null, category: $("ni-cat").value.trim(),
+    price: parseInt($("ni-price").value, 10), description: $("ni-desc").value.trim() || null,
+    sort_order: (menu.at(-1)?.sort_order || 0) + 1,
+  };
+  const { error } = await db.from("menu_items").insert(row);
+  if (error) { $("ni-error").textContent = error.code === "23505" ? "An item with that name already exists." : error.message; return; }
+  $("ni-error").textContent = ""; e.target.reset(); $("ni-cat").value = "Batata";
+  await loadMenu(); renderMenu();
+});
+
+setInterval(() => { if (!$("app").hidden && tab !== "menu") render(); }, 30000); // keep "x min ago" fresh
+</script>
+</body>
+</html>

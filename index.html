@@ -23,7 +23,7 @@
   "priceRange": "EGP 25–95",
   "address": { "@type": "PostalAddress", "addressLocality": "Zamalek, Cairo", "addressCountry": "EG" },
   "openingHours": "Mo-Su 16:00-01:00",
-  "paymentAccepted": "Cash, InstaPay"
+  "paymentAccepted": "Cash, Credit Card"
 }
 </script>
 
@@ -37,8 +37,8 @@
     --flesh: #e0661f;
     --skin: #8a3b2a;
     --line: #ecd3c3;
-    --wa: #1f8f4e;
-    --wa-ink: #ffffff;
+    --go: #1f8f4e;
+    --go-ink: #ffffff;
     --ok: #1f8f4e;
     --bad: #b8432f;
     --display: "Baloo Bhaijaan 2", "Trebuchet MS", system-ui, sans-serif;
@@ -47,14 +47,14 @@
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
-      --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --wa: #2bb365; --wa-ink: #0d1a12;
+      --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --go: #2bb365; --go-ink: #0d1a12;
       --ok: #4fd18a; --bad: #f08a76;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
     --bg: #1c1210; --surface: #271a16; --ink: #f6e6dc; --muted: #c2a093;
-    --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --wa: #2bb365; --wa-ink: #0d1a12;
+    --flesh: #f7894a; --skin: #e9a184; --line: #3f2a23; --go: #2bb365; --go-ink: #0d1a12;
     --ok: #4fd18a; --bad: #f08a76;
     color-scheme: dark;
   }
@@ -62,71 +62,37 @@
   /* ============ BASE ============ */
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.55;
-  }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
   body.has-cart { padding-bottom: 88px; }
   .wrap {
-    max-width: 600px;
-    margin: 0 auto;
-    padding-block: 40px 56px;
+    max-width: 600px; margin: 0 auto; padding-block: 40px 56px;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
-    display: grid;
-    gap: 40px;
+    display: grid; gap: 40px;
   }
-  h2.section {
-    font-family: var(--display);
-    font-size: 1.6rem;
-    line-height: 1.1;
-    color: var(--skin);
-    margin: 0 0 12px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 8px 20px;
-  }
+  h2.section { font-family: var(--display); font-size: 1.6rem; line-height: 1.1; color: var(--skin); margin: 0 0 12px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 8px 20px; }
   button { font: inherit; cursor: pointer; }
+  button:disabled { cursor: progress; opacity: .7; }
   :focus-visible { outline: 3px solid var(--flesh); outline-offset: 2px; }
+  [hidden] { display: none !important; }
 
   /* ============ HEADER ============ */
   header { display: grid; gap: 6px; }
   .ar { font-family: var(--display); font-weight: 700; color: var(--flesh); font-size: 1.35rem; line-height: 1; }
-  h1 {
-    font-family: var(--display); font-weight: 800;
-    font-size: clamp(2.6rem, 11vw, 3.6rem); line-height: 0.95;
-    margin: 0; color: var(--skin); text-wrap: balance;
-  }
+  h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2.6rem, 11vw, 3.6rem); line-height: 0.95; margin: 0; color: var(--skin); text-wrap: balance; }
   .tag { margin: 6px 0 0; color: var(--muted); max-width: 42ch; }
   .meta { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 6px; }
   .where { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
-  .status {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 0.82rem; font-weight: 600;
-    padding: 4px 10px; border-radius: 999px;
-    border: 1px solid var(--line); background: var(--surface);
-  }
+  .status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
   .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
   .status.open { color: var(--ok); } .status.open::before { background: var(--ok); }
   .status.closed { color: var(--bad); } .status.closed::before { background: var(--bad); }
   .hero-cta { margin-top: 14px; }
 
   /* ============ MENU ============ */
-  .menu h3.cat {
-    font-family: var(--display); font-size: 0.85rem; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--muted); margin: 16px 0 0;
-  }
-  .item {
-    display: grid; grid-template-columns: 1fr auto; gap: 4px 16px;
-    padding-block: 16px; border-top: 1px dashed var(--line);
-  }
+  .menu h3.cat { font-family: var(--display); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 16px 0 0; }
+  .item { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding-block: 16px; border-top: 1px dashed var(--line); }
   .cat + .item { border-top: 0; }
   .item h4 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; line-height: 1.2; margin: 0; min-width: 0; }
   .item h4 span { display: block; font-size: 0.95rem; color: var(--flesh); font-weight: 600; }
@@ -134,17 +100,12 @@
   .price { font-family: var(--display); font-weight: 800; font-size: 1.25rem; color: var(--skin); font-variant-numeric: tabular-nums; white-space: nowrap; align-self: start; }
   .price small { font-size: 0.75rem; font-weight: 600; color: var(--muted); margin-left: 3px; }
   .item .controls { grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 4px; }
-  .add {
-    border: 1.5px solid var(--flesh); color: var(--flesh); background: transparent;
-    font-weight: 600; padding: 8px 18px; border-radius: 999px; min-height: 40px;
-  }
+  .add { border: 1.5px solid var(--flesh); color: var(--flesh); background: transparent; font-weight: 600; padding: 8px 18px; border-radius: 999px; min-height: 40px; }
   .add:hover { background: var(--flesh); color: var(--surface); }
   .qty { display: inline-flex; align-items: center; gap: 4px; border: 1.5px solid var(--flesh); border-radius: 999px; padding: 2px; }
-  .qty button {
-    width: 36px; height: 36px; border-radius: 50%; border: 0;
-    background: var(--flesh); color: var(--surface); font-size: 1.2rem; font-weight: 700; line-height: 1;
-  }
+  .qty button { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--flesh); color: var(--surface); font-size: 1.2rem; font-weight: 700; line-height: 1; }
   .qty output { min-width: 28px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .notice { padding: 16px 0; color: var(--muted); margin: 0; }
 
   /* ============ ORDER FORM ============ */
   .order { padding: 20px; display: grid; gap: 16px; }
@@ -157,30 +118,25 @@
   .sum-row.total { font-family: var(--display); font-size: 1.3rem; font-weight: 800; color: var(--skin); }
   .field { display: grid; gap: 6px; }
   .field label, .field legend { font-weight: 600; font-size: 0.92rem; }
-  .field input, .field select, .field textarea {
-    font: inherit; color: var(--ink); background: var(--bg);
-    border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%;
-  }
+  .field input, .field select, .field textarea { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; width: 100%; }
   .field textarea { resize: vertical; min-height: 70px; }
   fieldset.field { border: 0; padding: 0; margin: 0; }
   .radios { display: flex; flex-wrap: wrap; gap: 10px; }
-  .radios label {
-    display: inline-flex; align-items: center; gap: 8px; font-weight: 500;
-    border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; background: var(--bg);
-  }
+  .radios label { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; background: var(--bg); }
   .error { color: var(--bad); font-size: 0.9rem; margin: 0; min-height: 1.2em; }
   .hint { color: var(--muted); font-size: 0.88rem; margin: 0; }
 
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    background: var(--wa); color: var(--wa-ink); text-decoration: none; border: 0;
-    font-weight: 600; font-size: 1.05rem; padding: 14px 22px; border-radius: 999px;
-    transition: transform .15s ease, filter .15s ease;
-  }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: var(--go); color: var(--go-ink); text-decoration: none; border: 0; font-weight: 600; font-size: 1.05rem; padding: 14px 22px; border-radius: 999px; transition: transform .15s ease, filter .15s ease; }
   .btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
-  .btn svg { width: 22px; height: 22px; flex: none; }
   .btn.full { width: 100%; }
   .btn.alt { background: var(--flesh); color: #fff; }
+
+  /* ============ CONFIRMATION ============ */
+  .done { padding: 28px 20px; display: grid; gap: 10px; text-align: center; justify-items: center; }
+  .done .big { font-size: 2.6rem; line-height: 1; }
+  .done h3 { font-family: var(--display); font-size: 1.5rem; color: var(--skin); margin: 0; }
+  .done .code { font-family: var(--display); font-size: 1.8rem; font-weight: 800; letter-spacing: 0.08em; color: var(--flesh); user-select: all; }
+  .done p { margin: 0; color: var(--muted); max-width: 40ch; }
 
   /* ============ INFO, FAQ, FOOTER ============ */
   .info { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
@@ -196,12 +152,7 @@
   footer b { color: var(--ink); user-select: all; }
 
   /* ============ STICKY CART BAR (phones) ============ */
-  .cartbar {
-    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
-    padding: 12px max(16px, env(safe-area-inset-left, 0px)) calc(12px + env(safe-area-inset-bottom, 0px));
-    background: var(--surface); border-top: 1px solid var(--line);
-    display: none;
-  }
+  .cartbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 12px max(16px, env(safe-area-inset-left, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-top: 1px solid var(--line); display: none; }
   body.has-cart .cartbar { display: block; }
   .cartbar a { max-width: 600px; margin: 0 auto; display: flex; justify-content: space-between; }
 
@@ -211,7 +162,6 @@
 <body>
 
 <main class="wrap">
-  <!-- ============ TOP OF PAGE ============ -->
   <header>
     <div class="ar" lang="ar" dir="rtl">فرن البطاطا</div>
     <h1>Forn El Batata</h1>
@@ -223,15 +173,16 @@
     <div class="hero-cta"><a class="btn alt" href="#menu-title">See the menu &amp; order</a></div>
   </header>
 
-  <!-- ============ MENU (items come from the MENU list in the script below) ============ -->
+  <!-- ============ MENU (loaded from the database) ============ -->
   <section aria-labelledby="menu-title">
     <h2 class="section" id="menu-title">Menu</h2>
-    <div class="card menu" id="menu"></div>
+    <div class="card menu" id="menu"><p class="notice">Loading the menu…</p></div>
   </section>
 
   <!-- ============ ORDER FORM ============ -->
   <section aria-labelledby="order-title" id="order">
     <h2 class="section" id="order-title">Your order</h2>
+
     <form class="card order" id="order-form" novalidate>
       <div>
         <ul class="lines" id="lines"></ul>
@@ -245,36 +196,45 @@
 
       <div class="field">
         <label for="name">Your name</label>
-        <input id="name" name="name" autocomplete="name" required>
+        <input id="name" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="phone">Phone number</label>
+        <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01x xxxx xxxx" required>
       </div>
       <div class="field">
         <label for="area">Area</label>
-        <select id="area" name="area" required></select>
+        <select id="area" required></select>
       </div>
       <div class="field">
         <label for="address">Address</label>
-        <textarea id="address" name="address" autocomplete="street-address" placeholder="Street, building, floor, apartment" required></textarea>
+        <textarea id="address" autocomplete="street-address" placeholder="Street, building, floor, apartment" required></textarea>
       </div>
       <fieldset class="field">
-        <legend>Payment on delivery</legend>
+        <legend>Payment</legend>
         <div class="radios">
-          <label><input type="radio" name="pay" value="Cash" checked> Cash</label>
-          <label><input type="radio" name="pay" value="InstaPay"> InstaPay</label>
+          <label><input type="radio" name="pay" value="cash" checked> Cash on delivery</label>
+          <label id="card-option" hidden><input type="radio" name="pay" value="card"> Card / wallet online</label>
         </div>
       </fieldset>
       <div class="field">
         <label for="notes">Notes <span class="hint">(optional)</span></label>
-        <input id="notes" name="notes" placeholder="Extra cinnamon, no nuts, ring the bell twice…">
+        <input id="notes" placeholder="Extra cinnamon, no nuts, ring the bell twice…">
       </div>
 
       <p class="error" id="error" role="alert"></p>
-      <p class="hint" id="closed-hint" hidden>We're closed right now. You can still send your order and we'll confirm it when we open at 4 pm.</p>
-      <button class="btn full" type="submit">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
-        Send order on WhatsApp
-      </button>
-      <p class="hint">This opens WhatsApp with your order already written. Just press send.</p>
+      <p class="hint" id="closed-hint" hidden>We're closed right now. You can still place your order and we'll start on it when we open at 4 pm.</p>
+      <button class="btn full" type="submit" id="submit">Place order</button>
     </form>
+
+    <div class="card done" id="done" hidden tabindex="-1">
+      <div class="big" aria-hidden="true">🍠</div>
+      <h3>Order received!</h3>
+      <p>Your order number is</p>
+      <div class="code" id="done-code"></div>
+      <p id="done-text"></p>
+      <button class="btn alt" type="button" id="new-order">Start a new order</button>
+    </div>
   </section>
 
   <!-- ============ INFO ============ -->
@@ -282,7 +242,7 @@
     <h2 class="section" id="info-title">Good to know</h2>
     <div class="info">
       <div class="card"><h3>Hours</h3><p>Every day<br>4 pm – 1 am</p></div>
-      <div class="card"><h3>Delivery</h3><p id="areas-text"></p></div>
+      <div class="card"><h3>Delivery</h3><p id="areas-text">Loading…</p></div>
       <div class="card"><h3>Find us</h3><p>Zamalek, Cairo<br><a href="https://maps.google.com/?q=Zamalek,Cairo" target="_blank" rel="noopener">Open in Maps</a></p></div>
     </div>
   </section>
@@ -291,14 +251,14 @@
     <h2 class="section" id="faq-title">Questions</h2>
     <div class="card">
       <details><summary>How long does delivery take?</summary><p>Usually 30–45 minutes. Every batata is roasted to order over charcoal.</p></details>
-      <details><summary>How do I pay with InstaPay?</summary><p>Choose InstaPay in the order form and we'll send you our InstaPay details on WhatsApp when we confirm.</p></details>
+      <details><summary>How do I pay?</summary><p>Pay cash to the driver, or pay online by card when that option is shown.</p></details>
       <details><summary>Do you have options without nuts?</summary><p>Yes. The Classic and Om Ali can be made nut-free. Just add it in the notes.</p></details>
-      <details><summary>Can I order for a party?</summary><p>Yes. For 10 or more pieces, message us a day ahead and we'll prepare a tray.</p></details>
+      <details><summary>Can I order for a party?</summary><p>Yes. For 10 or more pieces, place your order a day ahead and mention it in the notes.</p></details>
     </div>
   </section>
 
   <footer>
-    <span>Questions? Message us: <b id="phone-display"></b></span>
+    <span id="phone-line" hidden>Questions? Call us: <b id="phone-display"></b></span>
     <span>© <span id="year"></span> Forn El Batata · فرن البطاطا</span>
   </footer>
 </main>
@@ -307,53 +267,22 @@
   <a class="btn" href="#order"><span id="bar-count">0 items</span><span id="bar-total">Review order · 0 EGP</span></a>
 </div>
 
-<script>
-/* =====================================================================
-   SETTINGS: change these to update the site. No other code needs to change.
-   ===================================================================== */
-const CONFIG = {
-  whatsappNumber: "201000000000",      // country code + number, no "+" or spaces
-  phoneDisplay:   "+20 100 000 0000",
-  timeZone:       "Africa/Cairo",
-  openHour:       16,                  // 4 pm
-  closeHour:      1,                   // 1 am (after midnight)
-  deliveryAreas: {                     // area name: delivery fee in EGP
-    "Zamalek":     20,
-    "Garden City": 30,
-    "Downtown":    30,
-  },
-};
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm";
+import { CONFIG } from "./config.js";
 
-const MENU = [
-  { id: "classic", category: "Batata", name: "Classic Charcoal Batata", ar: "بطاطا مشوية", price: 45,
-    desc: "A whole roasted sweet potato, split open hot with a knob of butter and a pinch of cinnamon." },
-  { id: "caramel", category: "Batata", name: "Caramel & Nuts Batata", ar: "بطاطا كراميل ومكسرات", price: 75,
-    desc: "Mashed roasted batata topped with salted caramel, toasted hazelnuts and pistachio." },
-  { id: "nutella", category: "Batata", name: "Nutella Batata", ar: "بطاطا نوتيلا", price: 85,
-    desc: "Roasted batata filled with warm Nutella and crushed biscuits." },
-  { id: "omali", category: "Batata", name: "Batata Om Ali", ar: "بطاطا أم علي", price: 95,
-    desc: "Baked in a clay dish with milk, cream, coconut, raisins and flaky pastry. Served bubbling." },
-  { id: "sahlab", category: "Drinks", name: "Hot Sahlab", ar: "سحلب", price: 40,
-    desc: "Thick, warm milk drink with coconut, cinnamon and nuts." },
-  { id: "tea", category: "Drinks", name: "Mint Tea", ar: "شاي بالنعناع", price: 25,
-    desc: "Fresh mint, served hot." },
-];
-
-/* =====================================================================
-   HOW THE PAGE WORKS (you don't need to edit below this line)
-   ===================================================================== */
 const $ = (id) => document.getElementById(id);
 const egp = (n) => `${n} EGP`;
-const byId = Object.fromEntries(MENU.map((m) => [m.id, m]));
-const escapeHtml = (s) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
-// Cart: { itemId: quantity }. Remembered on this device if the browser allows it.
+let MENU = [], AREAS = [], byId = {};
 let cart = {};
 try { cart = JSON.parse(localStorage.getItem("feb-cart") || "{}") || {}; } catch (e) { cart = {}; }
-for (const id of Object.keys(cart)) if (!byId[id] || !(cart[id] > 0)) delete cart[id];
 const saveCart = () => { try { localStorage.setItem("feb-cart", JSON.stringify(cart)); } catch (e) {} };
 
-// ---- Open / closed badge (uses Cairo time, wherever the visitor is) ----
+const db = CONFIG.supabaseUrl && CONFIG.supabaseKey ? createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey) : null;
+
+// ---- Open / closed badge (Cairo time) ----
 function isOpenNow() {
   const hour = parseInt(new Intl.DateTimeFormat("en-GB", { hour: "numeric", hourCycle: "h23", timeZone: CONFIG.timeZone }).format(new Date()), 10);
   const { openHour: o, closeHour: c } = CONFIG;
@@ -361,25 +290,25 @@ function isOpenNow() {
 }
 function renderStatus() {
   const open = isOpenNow();
-  const el = $("status");
-  el.className = "status " + (open ? "open" : "closed");
-  el.textContent = open ? "Open now · until 1 am" : "Closed · opens at 4 pm";
+  $("status").className = "status " + (open ? "open" : "closed");
+  $("status").textContent = open ? "Open now · until 1 am" : "Closed · opens at 4 pm";
   $("closed-hint").hidden = open;
 }
 
 // ---- Menu ----
 function renderMenu() {
+  if (!MENU.length) return;
   let html = "", lastCat = null;
   for (const m of MENU) {
-    if (m.category !== lastCat) { html += `<h3 class="cat">${escapeHtml(m.category)}</h3>`; lastCat = m.category; }
+    if (m.category !== lastCat) { html += `<h3 class="cat">${esc(m.category)}</h3>`; lastCat = m.category; }
     const q = cart[m.id] || 0;
     const controls = q === 0
-      ? `<button type="button" class="add" data-act="inc" data-id="${m.id}" aria-label="Add ${escapeHtml(m.name)}">Add</button>`
-      : `<span class="qty"><button type="button" data-act="dec" data-id="${m.id}" aria-label="Remove one ${escapeHtml(m.name)}">−</button><output aria-live="polite">${q}</output><button type="button" data-act="inc" data-id="${m.id}" aria-label="Add one more ${escapeHtml(m.name)}">+</button></span>`;
+      ? `<button type="button" class="add" data-act="inc" data-id="${esc(m.id)}" aria-label="Add ${esc(m.name)}">Add</button>`
+      : `<span class="qty"><button type="button" data-act="dec" data-id="${esc(m.id)}" aria-label="Remove one ${esc(m.name)}">−</button><output aria-live="polite">${q}</output><button type="button" data-act="inc" data-id="${esc(m.id)}" aria-label="Add one more ${esc(m.name)}">+</button></span>`;
     html += `<div class="item">
-      <h4>${escapeHtml(m.name)} <span lang="ar">${m.ar}</span></h4>
+      <h4>${esc(m.name)} ${m.name_ar ? `<span lang="ar">${esc(m.name_ar)}</span>` : ""}</h4>
       <div class="price">${m.price}<small>EGP</small></div>
-      <p>${escapeHtml(m.desc)}</p>
+      <p>${esc(m.description)}</p>
       <div class="controls">${controls}</div>
     </div>`;
   }
@@ -389,12 +318,9 @@ $("menu").addEventListener("click", (e) => {
   const b = e.target.closest("button[data-act]");
   if (!b) return;
   const id = b.dataset.id;
-  cart[id] = (cart[id] || 0) + (b.dataset.act === "inc" ? 1 : -1);
+  cart[id] = Math.min(50, (cart[id] || 0) + (b.dataset.act === "inc" ? 1 : -1));
   if (cart[id] <= 0) delete cart[id];
-  saveCart();
-  renderMenu();
-  renderOrder();
-  // keep keyboard focus on the same item after re-render
+  saveCart(); renderMenu(); renderOrder();
   const again = document.querySelector(`button[data-id="${id}"][data-act="${b.dataset.act}"]`) || document.querySelector(`button[data-id="${id}"]`);
   if (again) again.focus();
 });
@@ -402,71 +328,125 @@ $("menu").addEventListener("click", (e) => {
 // ---- Order summary ----
 function totals() {
   const subtotal = Object.entries(cart).reduce((s, [id, q]) => s + byId[id].price * q, 0);
-  const area = $("area").value;
-  const delivery = area ? CONFIG.deliveryAreas[area] : 0;
+  const areaName = $("area").value;
+  const area = AREAS.find((a) => a.name === areaName);
+  const delivery = area ? area.fee : 0;
   const count = Object.values(cart).reduce((s, q) => s + q, 0);
-  return { subtotal, delivery, total: subtotal + delivery, count, area };
+  return { subtotal, delivery, total: subtotal + delivery, count, area: areaName };
 }
 function renderOrder() {
   const t = totals();
   $("lines").innerHTML = Object.entries(cart).map(([id, q]) =>
-    `<li><span>${q} × ${escapeHtml(byId[id].name)}</span><span>${egp(byId[id].price * q)}</span></li>`).join("");
+    `<li><span>${q} × ${esc(byId[id].name)}</span><span>${egp(byId[id].price * q)}</span></li>`).join("");
   $("empty").hidden = t.count > 0;
   $("subtotal").textContent = egp(t.subtotal);
   $("delivery-label").textContent = t.area ? `Delivery (${t.area})` : "Delivery";
   $("delivery").textContent = t.area ? egp(t.delivery) : "Choose area";
   $("total").textContent = egp(t.total);
-  document.body.classList.toggle("has-cart", t.count > 0);
+  document.body.classList.toggle("has-cart", t.count > 0 && $("done").hidden);
   $("bar-count").textContent = `${t.count} item${t.count === 1 ? "" : "s"}`;
   $("bar-total").textContent = `Review order · ${egp(t.total)}`;
 }
-
-// ---- Area dropdown & info text ----
-$("area").innerHTML = `<option value="">Choose your area…</option>` +
-  Object.entries(CONFIG.deliveryAreas).map(([a, fee]) => `<option value="${escapeHtml(a)}">${escapeHtml(a)} (+${fee} EGP)</option>`).join("");
 $("area").addEventListener("change", renderOrder);
-$("areas-text").innerHTML = Object.entries(CONFIG.deliveryAreas).map(([a, fee]) => `${escapeHtml(a)}: ${fee} EGP`).join("<br>");
 
-// ---- Send order on WhatsApp ----
-$("order-form").addEventListener("submit", (e) => {
+// ---- Load menu & delivery areas from the database ----
+async function loadData() {
+  if (!db) {
+    $("menu").innerHTML = `<p class="notice">The online menu isn't connected yet. (Add your Supabase details in <b>config.js</b>.)</p>`;
+    $("areas-text").textContent = "Coming soon";
+    $("submit").disabled = true;
+    return;
+  }
+  const [menuRes, areaRes] = await Promise.all([
+    db.from("menu_items").select("id, category, name, name_ar, description, price").eq("available", true).order("sort_order"),
+    db.from("delivery_areas").select("name, fee").order("sort_order"),
+  ]);
+  if (menuRes.error || areaRes.error) {
+    $("menu").innerHTML = `<p class="notice">We couldn't load the menu. Please refresh the page.</p>`;
+    console.error(menuRes.error || areaRes.error);
+    return;
+  }
+  MENU = menuRes.data; AREAS = areaRes.data;
+  byId = Object.fromEntries(MENU.map((m) => [m.id, m]));
+  for (const id of Object.keys(cart)) if (!byId[id] || !(cart[id] > 0)) delete cart[id];
+  saveCart();
+  $("area").innerHTML = `<option value="">Choose your area…</option>` +
+    AREAS.map((a) => `<option value="${esc(a.name)}">${esc(a.name)} (+${a.fee} EGP)</option>`).join("");
+  $("areas-text").innerHTML = AREAS.map((a) => `${esc(a.name)}: ${a.fee} EGP`).join("<br>");
+  renderMenu(); renderOrder();
+}
+
+// ---- Place the order ----
+$("order-form").addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!db) return;
   const t = totals();
-  const name = $("name").value.trim(), address = $("address").value.trim(), notes = $("notes").value.trim();
+  const name = $("name").value.trim(), phone = $("phone").value.trim();
+  const address = $("address").value.trim(), notes = $("notes").value.trim();
   const pay = document.querySelector('input[name="pay"]:checked').value;
   const problems = [];
   if (t.count === 0) problems.push("add at least one item");
   if (!name) problems.push("enter your name");
+  if (!/^[0-9 +()-]{7,20}$/.test(phone)) problems.push("enter a valid phone number");
   if (!t.area) problems.push("choose your area");
   if (!address) problems.push("enter your address");
   if (problems.length) { $("error").textContent = "Please " + problems.join(", ") + "."; return; }
   $("error").textContent = "";
 
-  const lines = Object.entries(cart).map(([id, q]) => `• ${q} × ${byId[id].name}: ${byId[id].price * q} EGP`);
-  const msg = [
-    "Hi Forn El Batata! New order:",
-    ...lines,
-    "",
-    `Subtotal: ${t.subtotal} EGP`,
-    `Delivery (${t.area}): ${t.delivery} EGP`,
-    `Total: ${t.total} EGP`,
-    "",
-    `Name: ${name}`,
-    `Area: ${t.area}`,
-    `Address: ${address}`,
-    `Payment: ${pay}`,
-    notes ? `Notes: ${notes}` : null,
-  ].filter((l) => l !== null).join("\n");
+  const btn = $("submit");
+  btn.disabled = true; btn.textContent = "Placing your order…";
+  try {
+    const { data, error } = await db.rpc("place_order", {
+      p_name: name, p_phone: phone, p_area: t.area, p_address: address, p_notes: notes,
+      p_payment_method: pay,
+      p_items: Object.entries(cart).map(([id, quantity]) => ({ id, quantity })),
+    });
+    if (error) throw error;
 
-  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+    if (pay === "card") {
+      const res = await db.functions.invoke("create-payment", { body: { code: data.code } });
+      if (res.error || !res.data?.url) throw new Error("We saved your order but couldn't open the payment page. Please try again or choose cash.");
+      cart = {}; saveCart();
+      location.href = res.data.url;   // go to Paymob's secure payment page
+      return;
+    }
+
+    cart = {}; saveCart();
+    showDone(data.code, `Total ${egp(data.total)}, paid in cash on delivery. We'll call you on ${phone} if we need anything.`);
+  } catch (err) {
+    $("error").textContent = err.message || "Something went wrong. Please try again.";
+  } finally {
+    btn.disabled = false; btn.textContent = "Place order";
+  }
 });
 
+function showDone(code, text) {
+  $("order-form").hidden = true;
+  $("done").hidden = false;
+  $("done-code").textContent = "#" + code;
+  $("done-text").textContent = text;
+  renderMenu(); renderOrder();
+  $("done").focus();
+  $("order").scrollIntoView({ behavior: "smooth" });
+}
+$("new-order").addEventListener("click", () => {
+  $("done").hidden = true;
+  $("order-form").hidden = false;
+  $("menu-title").scrollIntoView({ behavior: "smooth" });
+});
+
+// Coming back from the payment page: ?paid=CODE or ?failed=CODE
+const params = new URLSearchParams(location.search);
+if (params.get("paid")) showDone(params.get("paid"), "Payment received. We're preparing your order now.");
+if (params.get("failed")) $("error").textContent = "Your payment didn't go through. Your cart is empty. Please order again, or choose cash.";
+
 // ---- Start ----
-$("phone-display").textContent = CONFIG.phoneDisplay;
+$("card-option").hidden = !CONFIG.cardPayments;
+if (CONFIG.phoneDisplay) { $("phone-display").textContent = CONFIG.phoneDisplay; $("phone-line").hidden = false; }
 $("year").textContent = new Date().getFullYear();
 renderStatus();
 setInterval(renderStatus, 60000);
-renderMenu();
-renderOrder();
+loadData();
 </script>
 </body>
 </html>
