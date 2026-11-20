@@ -10,8 +10,8 @@ export const CONFIG = {
   supabaseUrl: "https://xczqgsxqonwbridhkmgh.supabase.co",
   supabaseKey: "sb_publishable_uu9_fHT_ogbuvDgZLhFm9g_V-X10Wdw",
 
-  // Card payments switch on once Paymob is connected (next step).
-  cardPayments: false,
+  // Card payments through Paymob (keys are stored in Cloudflare).
+  cardPayments: true,
 
   // Opening hours, in Cairo time
   timeZone: "Africa/Cairo",
