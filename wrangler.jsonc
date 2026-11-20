@@ -10,7 +10,10 @@
   },
   // Public settings. Secret keys live in Cloudflare → Settings → Variables and Secrets.
   "vars": {
-    "SUPABASE_URL": "https://xczqgsxqonwbridhkmgh.supabase.co"
+    "SUPABASE_URL": "https://xczqgsxqonwbridhkmgh.supabase.co",
+    // Paymob TEST mode values (public, safe to keep here). Change these when going live.
+    "PAYMOB_PUBLIC_KEY": "egy_pk_test_cWRMLu0mr8uzZmUx3WbHDHkHT67bIEco",
+    "PAYMOB_INTEGRATION_IDS": "6069800"
   },
   "observability": { "enabled": true },
   "workers_dev": true,
